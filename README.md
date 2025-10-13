@@ -1,9 +1,39 @@
 これはあやびーの個人ページのソースコード全文です。  
 
+使用したパッケージは以下の通り:
+``` json
+  // 先頭@付き(型定義のみ)は除く。一部順序入れ替え有り。
+  "dependencies": { // 本番用
+    "next": "^15.5.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    // -> 標準で入るやつ
+    "nodemailer": "^7.0.9",
+    "react-hook-form": "^7.65.0",
+    // -> お問い合わせフォーム用
+  },
+  "devDependencies": { // 開発環境のみ
+    "typescript": "^5.9.3",
+    // -> TypeScriptの使用
+    "eslint": "^9.37.0",
+    "eslint-config-next": "^15.5.4",
+    "prettier": "^3.6.2",
+    // -> lint/フォーマッター
+    "npm-check-updates": "^19.0.0",
+    // -> パッケージ依存関係を最新バージョンにアップデートする
+    "sass": "^1.93.2",
+    "tailwindcss": "^4.1.14",
+    // -> CSSまわり
+  },
+```
+
 ---
+
 以下はcreate-next-app標準のREADME  
 メモとして残しておく。  
-ただしVercelは使用せず、VPS上で公開。  
+ただしVercelは使用せず、VPS上で公開。   
+
+---
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
