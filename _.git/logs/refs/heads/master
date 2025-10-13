@@ -1,5 +1,0 @@
-0000000000000000000000000000000000000000 5b4f288734761f158a9590b804bf5bf2269da434 ayebee <ayebee.ty@gmail.com> 1706380236 +0900	commit (initial): Initial commit from Create Next App
-5b4f288734761f158a9590b804bf5bf2269da434 52d7fa60042bc20d62c54abf6c590de4e476e0f0 ayebee <ayebee.ty@gmail.com> 1760324283 +0900	commit: Docker対応/prettier追加/モジュールのupgrade
-52d7fa60042bc20d62c54abf6c590de4e476e0f0 96e51632b1a40e24d84688f0f0a8bd4caa619d21 ayebee <ayebee.ty@gmail.com> 1760324556 +0900	commit: CSSで制御するためにSVGをベタ書きに変更
-96e51632b1a40e24d84688f0f0a8bd4caa619d21 97e4ab4c5a838539544496f9fe568c348971088d ayebee <ayebee.ty@gmail.com> 1760324581 +0900	commit: アイコンとサムネの追加
-97e4ab4c5a838539544496f9fe568c348971088d 79f8f87ed30d84a87a3e89b5a9e35c60930c4971 ayebee <ayebee.ty@gmail.com> 1760324971 +0900	commit: @types/json5追加
