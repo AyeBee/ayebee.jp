@@ -6,9 +6,9 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { readFileSync } from "fs";
+import { readFile } from "fs/promises";
 
-export const runtime = "nodejs";        // nodemailerを使うためEdgeは不可
+export const runtime = "nodejs"; // nodemailerを使うためEdgeは不可
 export const dynamic = "force-dynamic"; // 念のためキャッシュ無効
 
 // --- レート制限（超簡易・インメモリ / 1分5回/IP） ---
@@ -16,10 +16,14 @@ const limiter = new Map<string, { count: number; ts: number }>();
 const WINDOW_MS = 60000;
 const MAX_REQ = 5;
 
-const readSecret = (path: string): string => {
-  try { return readFileSync(path, "utf8").trim(); }
-  catch { return ""; }
-}
+const readSecret = async (path: string | undefined): Promise<string> => {
+  if (!path) return "";
+  try {
+    return (await readFile(path, "utf8")).trim();
+  } catch {
+    return "";
+  }
+};
 
 const rateLimit = (ip: string): boolean => {
   const now = Date.now();
@@ -33,14 +37,16 @@ const rateLimit = (ip: string): boolean => {
   }
   rec.count++;
   return true;
-}
+};
 
 const isEmail = (s: string): boolean => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
-}
+};
 
 const sanitize = (s: string): string => {
-  return String(s ?? "").toString().trim();
+  return String(s ?? "")
+    .toString()
+    .trim();
 };
 
 const getClientIp = (req: NextRequest): string => {
@@ -70,7 +76,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const body = await req.json().catch(() => ({} as any));
+    const body = await req.json().catch(() => ({}) as any);
     const organization = sanitize(body.organization || "");
     const name = sanitize(body.name);
     const email = sanitize(body.email);
@@ -94,23 +100,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
-//  // --- （任意）hCaptcha検証 ---
-//  if (process.env.HCAPTCHA_SECRET && hcaptchaToken) {
-//    const r = await fetch("https://hcaptcha.com/siteverify", {
-//      method: "POST",
-//      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-//      body: new URLSearchParams({
-//        secret: process.env.HCAPTCHA_SECRET!,
-//        response: hcaptchaToken,
-//      }),
-//    }).then((r) => r.json() as Promise<{ success: boolean }>);
-//    if (!r.success) {
-//      return NextResponse.json(
-//        { ok: false, error: "hCaptcha failed" },
-//        { status: 400 }
-//      );
-//    }
-//  }
+    //  // --- （任意）hCaptcha検証 ---
+    //  if (process.env.HCAPTCHA_SECRET && hcaptchaToken) {
+    //    const r = await fetch("https://hcaptcha.com/siteverify", {
+    //      method: "POST",
+    //      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    //      body: new URLSearchParams({
+    //        secret: process.env.HCAPTCHA_SECRET!,
+    //        response: hcaptchaToken,
+    //      }),
+    //    }).then((r) => r.json() as Promise<{ success: boolean }>);
+    //    if (!r.success) {
+    //      return NextResponse.json(
+    //        { ok: false, error: "hCaptcha failed" },
+    //        { status: 400 }
+    //      );
+    //    }
+    //  }
 
     // --- メール送信（nodemailer + SES SMTP） ---
     const requiredEnv = [
@@ -133,9 +139,13 @@ export async function POST(req: NextRequest) {
       port: Number(process.env.SMTP_PORT || 587),
       secure: Number(process.env.SMTP_PORT || 587) === 465, // 465ならtrue
       auth: {
-        user: process.env.SMTP_USER ?? readSecret("/run/secrets/smtp_user"),
-        pass: process.env.SMTP_PASS ?? readSecret("/run/secrets/smtp_pass")
-      }
+        user:
+          process.env.SMTP_USER ??
+          (await readSecret(process.env.SMTP_USER_PATH)),
+        pass:
+          process.env.SMTP_PASS ??
+          (await readSecret(process.env.SMTP_PASS_PATH)),
+      },
     });
 
     const info = await transporter.sendMail({
@@ -153,21 +163,20 @@ IPアドレス: ${ip}
 
 メッセージ:
 ${message}
-`
+`,
     });
-    
 
     // 2通目：送信者（ユーザー）へ自動返信
     await transporter.sendMail({
-    from: process.env.MAIL_FROM!,                 // ← あなたのドメイン
-    to: email,                                    // ← ユーザーのメール
-    replyTo: process.env.MAIL_TO!,                // 返信先はあなた側に
-    headers: {
+      from: process.env.MAIL_FROM!, // ← あなたのドメイン
+      to: email, // ← ユーザーのメール
+      replyTo: process.env.MAIL_TO!, // 返信先はあなた側に
+      headers: {
         "Auto-Submitted": "auto-replied",
         "X-Auto-Response-Suppress": "All",
-    },
-    subject: "【自動返信】お問い合わせを受け付けました",
-    text: `${name} 様
+      },
+      subject: "【自動返信】お問い合わせを受け付けました",
+      text: `${name} 様
 
 あやびーと申します。
 
