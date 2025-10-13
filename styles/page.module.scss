@@ -1,0 +1,522 @@
+.title {
+  font-size: calc(100vw / 8 * 0.9);
+  text-wrap: nowrap;
+  padding: 1em 0;
+
+  strong {
+    font-weight: 900;
+  }
+
+  @media screen and (min-width: 1024px) {
+    font-size: 50px;
+  }
+  @media screen and (max-width: 1023px) {
+    font-size: calc(100vw / 8 * 0.9);
+  }
+}
+
+/* profile area */
+
+.profile {
+  --me-width: 500px;
+  --me-height: 500px;
+
+  position: relative;
+  height: calc(var(--me-height) - 50px);
+  margin-bottom: 75px;
+
+  @media screen and (max-width: 1023px) {
+    height: 825px;
+  }
+
+  .me .face {
+    width: calc(var(--me-width) - 100px);
+    height: calc(var(--me-height) - 100px);
+    max-width: 90vw;
+
+    .myOutline {
+      fill: #000;
+    }
+    .myAhoge {
+      fill: url(#gr-2);
+    }
+    .myHighlight path {
+      fill: #fff;
+    }
+    .myRightEar {
+      fill: url(#gr-3);
+    }
+    .myMouseAndCheek {
+      fill: #feafad;
+    }
+    .myLeftEar {
+      fill: url(#gr);
+    }
+    .myHair {
+      fill: #d4bc89;
+    }
+    .myFace {
+      fill: #fcf6e3;
+    }
+    .myEye {
+      fill: #756d5b;
+    }
+  }
+
+  &[class*="hover"] .me {
+    animation: 0.0625s linear infinite icon-rotation;
+    @keyframes icon-rotation {
+      0% {
+        transform: rotate(0);
+      }
+      25% {
+        transform: rotate(calc(5deg));
+      }
+      50% {
+        transform: rotate(calc(-5deg));
+      }
+      75% {
+        transform: rotate(calc(10deg));
+      }
+      100% {
+        transform: rotate(calc(0deg));
+      }
+    }
+  }
+
+  .links {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    @media screen and (min-width: 1024px) {
+      top: 0;
+    }
+
+    .item {
+      /* data-indexプロパティ → CSS変数のマッピング */
+      /* CSS3ではattrは文字列として解釈されるため, calc()に直接設定できない. */
+      &[data-index="0"] {
+        --order: 0;
+      }
+      &[data-index="1"] {
+        --order: 1;
+      }
+      &[data-index="2"] {
+        --order: 2;
+      }
+      &[data-index="3"] {
+        --order: 3;
+      }
+      &[data-index="4"] {
+        --order: 4;
+      }
+      &[data-index="5"] {
+        --order: 5;
+      }
+
+      @media screen and (min-width: 1024px) {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 100;
+
+        /* 表示位置の計算 */
+        --angle: calc(360deg / 8 * (var(--order) - 2));
+        --x: calc(cos(var(--angle)) * var(--me-width) / 2);
+        --y: calc(sin(var(--angle)) * var(--me-height) / 2);
+        translate: calc(var(--x) - 50%) calc(var(--y) - 50%);
+      }
+      @media screen and (max-width: 1023px) {
+        position: relative;
+        margin-top: 20px;
+        left: 50px;
+      }
+
+      .group {
+        display: block;
+        text-align: center;
+      }
+      small {
+        display: block;
+        width: 50px;
+        color: rgba(0, 0, 0, 0.5);
+      }
+      &.xApp .icon {
+        width: 45px;
+        height: 45px;
+        padding: 2.5px;
+        .path {
+          fill: #000;
+        }
+      }
+      &.misskeyIo .icon {
+        width: 50px;
+        height: 50px;
+        .path {
+          fill: #5865f2;
+        }
+      }
+      &.bluesky .icon {
+        width: 50px;
+        height: 50px;
+        .path {
+          fill: #1184fd;
+        }
+      }
+      &.vrChat .icon {
+        width: 50px;
+        height: 50px;
+        display: inline-block;
+      }
+      &.discord .icon {
+        width: 50px;
+        height: 36px;
+        .path {
+          fill: #5865f2;
+        }
+      }
+      &.github .icon {
+        width: 50px;
+        height: 50px;
+        .path {
+          fill: #24292f;
+        }
+      }
+      &.xApp .toolTip s {
+        text-decoration: none;
+        &::before {
+          content: "";
+          position: absolute;
+          border-top: 5px double #fff;
+          top: 1.5em;
+          width: 3.3em;
+          text-decoration: none;
+        }
+      }
+      &.vrChat .toolTip {
+        @media screen and (min-width: 1024px) {
+          width: calc(300px - 70px);
+        }
+      }
+      &.discord .toolTip {
+        width: calc(300px - 70px);
+        padding: 0.5em 1em;
+      }
+      .toolTip {
+        top: -5px;
+        left: -5px;
+        height: 60px;
+        width: 300px;
+        padding: 1em 0 0 65px;
+        position: absolute;
+        z-index: -1;
+        border-radius: 5px;
+        transition-duration: 0.3s;
+        color: transparent;
+        font-family: "Roboto", "Noto Sans JP", sans-serif;
+        .platform {
+          font-weight: 900;
+          font-size: 1.25em;
+          &::before {
+            content: " on ";
+            font-weight: 500 !important;
+          }
+        }
+      }
+
+      &:hover {
+        &.xApp .icon .path {
+          fill: #fff;
+        }
+        &.bluesky .icon .path {
+          fill: #fff;
+        }
+        &.vrChat .icon {
+          width: 120px;
+          /*MEMO: 複雑な形状なのでpathの制御はJavaScript. ここではサイズだけ設定. */
+        }
+        .toolTip {
+          color: #fff;
+        }
+        &.xApp .toolTip {
+          background-color: #000;
+        }
+        &.misskeyIo .toolTip {
+          background-color: #1b1e1f;
+        }
+        &.bluesky .toolTip {
+          background-image: linear-gradient(#1184fd, #65bcfc);
+        }
+        &.vrChat .toolTip {
+          left: 65px;
+          background-color: #000;
+        }
+        &.discord .toolTip {
+          left: 65px;
+          background-color: #5865f2;
+          &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 20px;
+            left: -9px;
+            width: 10px;
+            height: 20px;
+            background-color: #5865f2;
+            clip-path: polygon(100% 30%, 0 15%, 100% 100%);
+          }
+        }
+        &.booth .icon.on {
+          display: inline-block;
+        }
+        &.github {
+          .toolTip {
+            background-color: #24292f;
+          }
+          .icon .path {
+            fill: #fff;
+          }
+        }
+      }
+
+      /** 画面幅小さい時 & スマホ対応 */
+      @media screen and (max-width: 1023px) {
+        a {
+          width: 315px;
+          height: 50px;
+          display: block;
+        }
+        &.xApp .icon .path {
+          fill: #fff;
+        }
+        &.bluesky .icon .path {
+          fill: #fff;
+        }
+        .toolTip {
+          color: #fff;
+        }
+        &.xApp .toolTip {
+          background-color: #000;
+        }
+        &.misskeyIo .toolTip {
+          background-color: #1b1e1f;
+        }
+        &.bluesky .toolTip {
+          background-image: linear-gradient(#1184fd, #65bcfc);
+        }
+        &.vrChat .toolTip {
+          background-color: #000;
+        }
+        &.discord .toolTip {
+          left: 65px;
+          background-color: #5865f2;
+          &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 20px;
+            left: -9px;
+            width: 10px;
+            height: 20px;
+            background-color: #5865f2;
+            clip-path: polygon(100% 30%, 0 15%, 100% 100%);
+          }
+        }
+        &.booth a {
+          display: block;
+          width: 295px;
+          height: 50px;
+          background-color: rgb(245, 73, 84);
+          .icon {
+            &.on {
+              display: inline-block;
+            }
+            &.off {
+              display: none;
+            }
+          }
+        }
+        &.github {
+          .toolTip {
+            background-color: #24292f;
+          }
+          .icon .path {
+            fill: #fff;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* contact form area */
+
+.contact {
+  width: 100%;
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: 1px dotted rgba(0, 0, 0, 0.5);
+
+  header {
+    font-weight: 900;
+    font-size: 1.5em;
+  }
+  form {
+    width: 500px;
+    max-width: 95vw;
+
+    dt {
+      font-size: 0.9em;
+      display: inline-block;
+      color: #111;
+      padding: 3px 15px 0;
+      margin-top: 5px;
+      position: relative;
+      &.required::after {
+        content: "*";
+        color: red;
+        padding: 0 0.5em;
+      }
+    }
+    dd {
+      position: relative;
+      font-size: 1rem;
+      line-height: 1.8;
+      background-color: #fff;
+      [class="dummy"] {
+        display: block !important;
+        overflow: hidden;
+        visibility: hidden;
+        box-sizing: border-box;
+        padding: 5px 15px;
+        min-height: calc(1rem + 10px * 2);
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        border: 1px solid;
+      }
+      input,
+      textarea {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        overflow: hidden;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        color: inherit;
+        font: inherit;
+        letter-spacing: inherit;
+        resize: none;
+        border-radius: 5px;
+        padding: 5px 15px;
+        &[class*="error"] {
+          border-color: rgba(255, 0, 0, 0.5);
+        }
+        &:focus {
+          outline: 2px solid #000;
+          border-color: transparent;
+        }
+      }
+      .errorMessage {
+        color: red;
+        font-size: 0.75em;
+        padding-left: 1em;
+      }
+    }
+    &[data-state="input"] {
+      [class*="dummy"] {
+        display: none;
+        margin: 0;
+        padding: 0;
+        border: none;
+      }
+      input,
+      textarea {
+        display: block;
+      }
+      .formMessage {
+        display: none;
+      }
+    }
+    &[data-state="confirm"] {
+      dl {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        border-bottom: 1px dashed #000;
+        dt {
+          margin-top: 0;
+          small,
+          &::after {
+            display: none;
+          }
+          &::before {
+            display: none;
+          }
+        }
+        dd {
+          padding-left: 5px;
+          background-color: transparent;
+        }
+        dt,
+        dd {
+          border-top: 1px dashed #000;
+        }
+      }
+      [class*="dummy"] {
+        display: block;
+        visibility: visible;
+        border: none;
+        padding: 0;
+      }
+      input,
+      textarea {
+        display: none;
+      }
+      .formMessage {
+        display: block;
+      }
+    }
+    &[data-state="sent"] {
+      dl,
+      .reset {
+        display: none !important;
+      }
+    }
+  }
+  .formAction {
+    margin-top: 1em;
+    text-align: center;
+    position: relative;
+    z-index: 9999;
+    .formMessage {
+      margin: 1em 0;
+    }
+    button {
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      border-radius: 3px;
+      padding: 10px 15px;
+      margin: 0 10px;
+      font-weight: bold;
+      &.reset {
+        background-color: rgba(0, 0, 0, 0.014);
+      }
+      &.submit {
+        padding: 10px 50px;
+        background-color: rgba(0, 0, 255, 0.125);
+      }
+      &:hover {
+        background-color: rgba(0, 0, 255, 0.25);
+      }
+    }
+  }
+}
+
+.anonymouseMessage {
+  text-align: center;
+  margin: 1em 0;
+}

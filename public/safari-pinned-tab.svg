@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 375.7">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#_名称未設定グラデーション_4);
+      }
+
+      .cls-2 {
+        fill: #040403;
+      }
+    </style>
+    <linearGradient id="_名称未設定グラデーション_4" data-name="名称未設定グラデーション 4" x1="195.24" y1="365.95" x2="495.13" y2="91.82" gradientTransform="translate(0 355.02) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff0021"/>
+      <stop offset=".12" stop-color="#ff41fd"/>
+      <stop offset=".24" stop-color="#0f28fe"/>
+      <stop offset=".36" stop-color="#00fff0"/>
+      <stop offset=".49" stop-color="#00fe00"/>
+      <stop offset=".61" stop-color="#ffcf16"/>
+      <stop offset=".73" stop-color="#ff571b"/>
+      <stop offset=".86" stop-color="#ff001c"/>
+      <stop offset="1" stop-color="#f014ce"/>
+    </linearGradient>
+  </defs>
+  <g id="outline-2">
+    <path class="cls-2" d="M401.89,347.57c-10.4-64.33-35.18-123.63-74.15-176.69C240.71,80.75,120.01,83.08,120.01,83.08c-35.22,26.22-70.9,51.82-91.69,92.46-3.26,6.36-11.01,11.64-16.6,6.83-7.91-6.67-15.98-16.44-9.15-28.24C253.9-123.11,471.09,42.89,496.69,120.78c14.83,37.45,32.08,127.3-18.28,226.01-7.4,14.51-21.22,24.77-37.15,28.19h0c-18.58,3.98-36.33-8.64-39.36-27.4ZM432,327.42c2.79,12.57,8.38,11.17,13.65,3.41,44.06-64.85,38.16-160.42,11.95-214.09C413.07,1.47,192,31.57,176.02,53.6c112.94,18.31,160.42,75.09,174.84,89.67,45.3,56.47,71.21,127.68,81.14,184.15Z"/>
+  </g>
+  <g id="ear_and_ahoge" data-name="ear and ahoge">
+    <path class="cls-1" d="M176.02,53.6c112.94,18.31,160.42,75.09,174.84,89.67,45.3,56.47,71.21,127.68,81.14,184.15,2.79,12.57,8.38,11.17,13.65,3.41,44.06-64.85,38.16-160.42,11.95-214.09C413.07,1.47,192,31.57,176.02,53.6Z"/>
+  </g>
+</svg>
