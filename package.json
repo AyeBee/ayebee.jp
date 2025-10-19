@@ -10,6 +10,7 @@
     "lint:fix": "eslint . --fix --cache"
   },
   "dependencies": {
+    "@hcaptcha/react-hcaptcha": "^1.12.1",
     "next": "^15.5.4",
     "nodemailer": "^7.0.9",
     "react": "^19.2.0",
@@ -22,7 +23,7 @@
     "@types/node": "^24.7.2",
     "@types/nodemailer": "^7.0.2",
     "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.1",
+    "@types/react-dom": "^19.2.2",
     "eslint": "^9.37.0",
     "eslint-config-next": "^15.5.4",
     "npm-check-updates": "^19.0.0",
