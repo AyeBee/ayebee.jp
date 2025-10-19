@@ -1,8 +1,7 @@
-// app/api/contact/route.ts
 // Next.js App Router 用の問い合わせAPI
 // - ランタイム: Node.js（Edge不可：nodemailer使用のため）
 // - 送信: AWS SES (SMTP) 経由
-// - 軽量レート制限 & 簡易バリデーション & （任意）hCaptcha対応
+// - 軽量レート制限 & 簡易バリデーション & hCaptcha対応
 
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
@@ -71,7 +70,7 @@ export async function POST(req: NextRequest) {
 
     if (!rateLimit(ip)) {
       return NextResponse.json(
-        { ok: false, error: "Too many requests" },
+        { ok: false, type: "quota-limit", error: "Too many requests" },
         { status: 429 }
       );
     }
@@ -82,41 +81,72 @@ export async function POST(req: NextRequest) {
     const email = sanitize(body.email);
     const message = sanitize(body.message);
     const website = sanitize(body.website || ""); // ハニーポット
-    const hcaptchaToken = body.hcaptchaToken ? String(body.hcaptchaToken) : "";
+    const hcaptcha = body.hcaptcha ? String(body.hcaptcha) : "";
 
     // ハニーポット：埋まってたら拒否
     if (website) {
       return NextResponse.json(
-        { ok: false, error: "Bad request" },
+        { ok: false, type: "invalid-request", error: "Invalid payload" },
         { status: 400 }
       );
     }
 
-    // 必須チェック & 形式
+    // 必須チェック & 形式(email)チェック
     if (!name || !email || !message || !isEmail(email)) {
       return NextResponse.json(
-        { ok: false, error: "Invalid payload" },
+        { ok: false, type: "invalid-request", error: "Invalid payload" },
         { status: 400 }
       );
     }
 
-    //  // --- （任意）hCaptcha検証 ---
-    //  if (process.env.HCAPTCHA_SECRET && hcaptchaToken) {
-    //    const r = await fetch("https://hcaptcha.com/siteverify", {
-    //      method: "POST",
-    //      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    //      body: new URLSearchParams({
-    //        secret: process.env.HCAPTCHA_SECRET!,
-    //        response: hcaptchaToken,
-    //      }),
-    //    }).then((r) => r.json() as Promise<{ success: boolean }>);
-    //    if (!r.success) {
-    //      return NextResponse.json(
-    //        { ok: false, error: "hCaptcha failed" },
-    //        { status: 400 }
-    //      );
-    //    }
-    //  }
+    // CAPTCHA検証（HCAPTCHA_SECRET が設定されている場合に有効化）
+    if (process.env.HCAPTCHA_SECRET) {
+      if (!hcaptcha) {
+        return NextResponse.json(
+          {
+            ok: false,
+            type: "captcha",
+            error: "captcha token missing",
+          },
+          { status: 400 }
+        );
+      }
+      const verifyBody = new URLSearchParams({
+        secret: process.env.HCAPTCHA_SECRET!,
+        response: hcaptcha,
+        remoteip: ip,
+      });
+      const verifyRes = await fetch("https://hcaptcha.com/siteverify", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: verifyBody,
+      });
+      if (!verifyRes.ok) {
+        return NextResponse.json(
+          {
+            ok: false,
+            type: "captcha",
+            error: `captcha verify failed: ${verifyRes.status}`,
+          },
+          { status: 502 }
+        );
+      }
+      const verifyJson = (await verifyRes.json()) as {
+        success: boolean;
+        "error-codes"?: string[];
+      };
+      if (!verifyJson.success) {
+        return NextResponse.json(
+          {
+            ok: false,
+            type: "captcha",
+            error: `captcha verify failed: ${verifyRes.status}`,
+            details: verifyJson["error-codes"] ?? [],
+          },
+          { status: 400 }
+        );
+      }
+    }
 
     // --- メール送信（nodemailer + SES SMTP） ---
     const requiredEnv = [
@@ -128,7 +158,11 @@ export async function POST(req: NextRequest) {
     for (const k of requiredEnv) {
       if (!process.env[k]) {
         return NextResponse.json(
-          { ok: false, error: `Server misconfigured: ${k} missing` },
+          {
+            ok: false,
+            type: "server",
+            error: `Server misconfigured: ${k} missing`,
+          },
           { status: 500 }
         );
       }
@@ -148,35 +182,18 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const info = await transporter.sendMail({
-      from: process.env.MAIL_FROM!,
-      to: process.env.MAIL_TO!,
-      replyTo: `${name} <${email}>`,
-      subject: `【ayebee.jpの問い合わせ】${name}${organization ? ` / ${organization}` : ""}`,
-      text: `
-以下の通り問い合わせがありました。
-
-IPアドレス: ${ip}
-組織名: ${organization || "（未入力）"}
-お名前: ${name}
-メール: ${email}
-
-メッセージ:
-${message}
-`,
-    });
-
-    // 2通目：送信者（ユーザー）へ自動返信
-    await transporter.sendMail({
-      from: process.env.MAIL_FROM!, // ← あなたのドメイン
-      to: email, // ← ユーザーのメール
-      replyTo: process.env.MAIL_TO!, // 返信先はあなた側に
-      headers: {
-        "Auto-Submitted": "auto-replied",
-        "X-Auto-Response-Suppress": "All",
-      },
-      subject: "【自動返信】お問い合わせを受け付けました",
-      text: `${name} 様
+    // 1通目：送信者（ユーザー）へ自動返信
+    try {
+      await transporter.sendMail({
+        from: process.env.MAIL_FROM!, // ← あなたのドメイン
+        to: email, // ← ユーザーのメール
+        replyTo: process.env.MAIL_TO!, // 返信先はあなた側に
+        headers: {
+          "Auto-Submitted": "auto-replied",
+          "X-Auto-Response-Suppress": "All",
+        },
+        subject: "【自動返信】お問い合わせを受け付けました",
+        text: `${name} 様
 
 あやびーと申します。
 
@@ -197,12 +214,48 @@ ${message}
 この度はお問い合わせいただきありがとうございました。
 
 ※本メールは送信専用の自動送信です。`,
+      });
+    } catch (e: any) {
+      // ここで失敗したらメアドの指定不備の可能性があるので400で返す
+      return NextResponse.json(
+        {
+          ok: false,
+          type: "auto-response-email",
+          error: "Auto response email did not reach.",
+          details: e ? [e.message] : [],
+        },
+        { status: 400 }
+      );
+    }
+
+    // 2通目：管理者へ通知(1通目の送信に失敗した場合はここまで来ない)
+    const info = await transporter.sendMail({
+      from: process.env.MAIL_FROM!,
+      to: process.env.MAIL_TO!,
+      replyTo: `${name} <${email}>`,
+      subject: `【ayebee.jpの問い合わせ】${name}${organization ? ` / ${organization}` : ""}`,
+      text: `
+以下の通り問い合わせがありました。
+
+IPアドレス: ${ip}
+組織名: ${organization || "（未入力）"}
+お名前: ${name}
+メール: ${email}
+
+メッセージ:
+${message}
+`,
     });
 
     return NextResponse.json({ ok: true, id: info.messageId });
   } catch (e: any) {
     return NextResponse.json(
-      { ok: false, error: e?.message || "server error" },
+      {
+        ok: false,
+        type: "inquiry-email",
+        error: "Failed to accept your inquiry email.",
+        details: e ? [e.message] : [],
+      },
       { status: 500 }
     );
   }

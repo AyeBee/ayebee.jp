@@ -365,7 +365,6 @@
   form {
     width: 500px;
     max-width: 95vw;
-
     dt {
       font-size: 0.9em;
       display: inline-block;
@@ -373,6 +372,7 @@
       padding: 3px 15px 0;
       margin-top: 5px;
       position: relative;
+      width: 250px;
       &.required::after {
         content: "*";
         color: red;
@@ -417,6 +417,7 @@
         &[class*="error"] {
           border-color: rgba(255, 0, 0, 0.5);
         }
+
         &:focus {
           outline: 2px solid #000;
           border-color: transparent;
@@ -443,10 +444,11 @@
         display: none;
       }
     }
-    &[data-state="confirm"] {
+    &[data-state="confirm"],
+    &[data-state="failed"] {
       dl {
         display: grid;
-        grid-template-columns: 110px 1fr;
+        grid-template-columns: 150px 1fr;
         border-bottom: 1px dashed #000;
         dt {
           margin-top: 0;
@@ -467,15 +469,23 @@
           border-top: 1px dashed #000;
         }
       }
-      [class*="dummy"] {
-        display: block;
-        visibility: visible;
-        border: none;
-        padding: 0;
-      }
       input,
       textarea {
-        display: none;
+        background: transparent !important;
+        box-shadow: 0 0 0 1000px white inset !important; /* オートコンプリート時の背景色を無理やり消す */
+        border: none;
+        padding: 0;
+        margin: 0;
+        outline: none;
+        box-shadow: none;
+        resize: none; /* textarea 用 */
+        caret-color: transparent; /* 読みやすさのためにキャレットを見せたくない場合のみ */
+        outline: none !important;
+        cursor: default;
+
+        &::placeholder {
+          color: transparent;
+        }
       }
       .formMessage {
         display: block;
@@ -483,8 +493,29 @@
     }
     &[data-state="sent"] {
       dl,
-      .reset {
+      .submit {
         display: none !important;
+      }
+    }
+    &[data-state="failed"] {
+      .reset {
+        background-color: rgba(0, 0, 255, 0.125) !important;
+        &:hover {
+          background-color: rgba(0, 0, 255, 0.25) !important;
+        }
+      }
+      .submit {
+        display: none !important;
+      }
+    }
+  }
+  .captcha {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    & > div {
+      text-align: center;
+      & > iframe {
+        display: inline-block;
       }
     }
   }
@@ -495,6 +526,9 @@
     z-index: 9999;
     .formMessage {
       margin: 1em 0;
+      &.error {
+        color: red;
+      }
     }
     button {
       border: 1px solid rgba(0, 0, 0, 0.25);
@@ -511,6 +545,9 @@
       }
       &:hover {
         background-color: rgba(0, 0, 255, 0.25);
+      }
+      &:disabled {
+        background-color: rgba(0, 0, 0, 0.014);
       }
     }
   }
