@@ -10,7 +10,7 @@ import {
   FieldError,
 } from "react-hook-form";
 import styles from "../styles/page.module.scss";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 /** フォーム送信タイムアウト時間(ms) */
 const SEND_TIMEOUT_MS = 15000;
@@ -22,7 +22,6 @@ interface IContactForm {
   email: string;
   message: string;
   website?: string; // スパム対策のための隠しフィールド
-  hcaptcha?: string | null; // hCaptcha トークン
 }
 
 /** フォーム入力項目識別キー定義 */
@@ -32,7 +31,6 @@ const FieldKey = {
   email: "email",
   message: "message",
   website: "website",
-  hcaptcha: "hcaptcha",
 } as const satisfies Record<string, Path<IContactForm>>;
 type FieldKey = (typeof FieldKey)[keyof typeof FieldKey];
 
@@ -174,12 +172,15 @@ const Input = ({
 /**
  * ContactForm
  * - 入力 → 確認 → 送信 の 3 ステップフォーム
- * - クライアント側で hCaptcha を必須にし、送信時にトークンをサーバへ渡す
- * - サーバ側で hCaptcha トークンの検証を必ず行うこと（重要）
+ * - クライアント側で Turnstile を必須にし、送信時にトークンをサーバへ渡す
+ * - サーバ側で Turnstile トークンの検証を必ず行うこと（重要）
  */
 export default function ContactForm(): React.JSX.Element {
-  const nextPublicHCaptchaSiteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY;
+  const NEXT_PUBLIC_TURNSTILE_SITE_KEY =
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
+  const turnstileRef = useRef<any>(null);
+  const [token, setToken] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -197,38 +198,18 @@ export default function ContactForm(): React.JSX.Element {
       email: "",
       message: "",
       website: "",
-      hcaptcha: null,
     },
   });
-  const [errorText, setErrorText] = useState<string[]>(
-    nextPublicHCaptchaSiteKey
-      ? []
-      : [
-          "CAPTCHAのサイトキーが未設定です。お手数ですが管理者(X(Twitter):@AyeBeeTY)まで連絡してください。",
-        ],
-  );
-  const [stage, setStage] = useState<Stage>(Stage.input);
 
-  const hcaptchaRef = useRef<HCaptcha | null>(null);
-  // hcaptchaを必須項目として追加し、isValidの判定対象とする
-  register(FieldKey.hcaptcha, { required: true });
+  const [errorText, setErrorText] = useState<string[]>([]);
+  const [stage, setStage] = useState<Stage>(Stage.input);
 
   /** エラーテキストが1行でもあれば true */
   const hasErrorText = errorText && errorText.length > 0;
 
-  /** CAPTCHAの入力をリセットする処理. */
-  const resetCaptcha = () => {
-    hcaptchaRef.current?.resetCaptcha();
-    setValue(FieldKey.hcaptcha, null, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-  };
-
   /**
    * 送信ボタンの動作.
-   * スパムチェックと hCaptcha チェックを行い, エラーなら何もしない.
+   * スパムチェックと Turnstile チェックを行い, エラーなら何もしない.
    * - stage === Input（入力画面）: 確認画面へ移動
    * - stage === Confirm（確認画面）: 実送信
    * @param values フォームデータ
@@ -242,7 +223,7 @@ export default function ContactForm(): React.JSX.Element {
     }
 
     // CAPTCHA未完了なら送信させない
-    if (!values.hcaptcha) {
+    if (!token) {
       setStage(Stage.failed);
       setErrorText(["人間による操作の確認（CAPTCHA）を完了してください。"]);
       return;
@@ -272,7 +253,7 @@ export default function ContactForm(): React.JSX.Element {
               email: values.email,
               message: values.message,
               website: values.website ?? "",
-              hcaptcha: values.hcaptcha ?? "",
+              token: token ?? "",
             }),
             signal: ac.signal,
           });
@@ -338,8 +319,6 @@ export default function ContactForm(): React.JSX.Element {
           }
         } finally {
           timeout && clearTimeout(timeout);
-          // トークンは使い捨てなので毎回クリア。ただし UI を即時更新するためオプションを付ける
-          resetCaptcha();
         }
         return;
 
@@ -359,7 +338,8 @@ export default function ContactForm(): React.JSX.Element {
     switch (stage) {
       case Stage.input:
         reset();
-        resetCaptcha();
+        turnstileRef.current?.reset();
+        setToken(null);
 
         setErrorText([]);
         return;
@@ -367,13 +347,16 @@ export default function ContactForm(): React.JSX.Element {
       case Stage.confirm:
         setStage(Stage.input);
         reset(undefined, { keepValues: true });
-        setValue(FieldKey.hcaptcha, null); // hCAPTCHAはリセットする
+        turnstileRef.current?.reset();
+        setToken(null);
         return;
 
       case Stage.sent:
         // リセット/送信完了画面から再度送るときはフォームをリセット
         setStage(Stage.input);
         reset();
+        turnstileRef.current?.reset();
+        setToken(null);
         return;
 
       case Stage.failed:
@@ -455,24 +438,13 @@ export default function ContactForm(): React.JSX.Element {
               {...register(FieldKey.website)}
             />
             <div id="contact-form-data-captcha" className={styles.captcha}>
-              {nextPublicHCaptchaSiteKey && (
-                <HCaptcha
-                  ref={hcaptchaRef}
-                  sitekey={nextPublicHCaptchaSiteKey}
-                  onVerify={(token) =>
-                    setValue(FieldKey.hcaptcha, token ?? null, {
-                      shouldValidate: true,
-                      shouldDirty: true,
-                      shouldTouch: true,
-                    })
-                  }
-                  onExpire={() =>
-                    setValue(FieldKey.hcaptcha, null, {
-                      shouldValidate: true,
-                      shouldDirty: true,
-                      shouldTouch: true,
-                    })
-                  }
+              {NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+                <Turnstile
+                  ref={turnstileRef}
+                  siteKey={NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                  onSuccess={(t) => setToken(t)}
+                  onError={() => setToken(null)}
+                  onExpire={() => setToken(null)}
                 />
               )}
             </div>

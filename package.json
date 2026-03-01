@@ -11,7 +11,7 @@
     "licenses:gen": "node scripts/generate-licenses.mjs"
   },
   "dependencies": {
-    "@hcaptcha/react-hcaptcha": "^1.12.1",
+    "@marsidev/react-turnstile": "^1.4.2",
     "next": "^15.5.4",
     "nodemailer": "^7.0.9",
     "react": "^19.2.0",

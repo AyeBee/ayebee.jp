@@ -15,6 +15,8 @@ const limiter = new Map<string, { count: number; ts: number }>();
 const WINDOW_MS = 60000;
 const MAX_REQ = 5;
 
+const TURNSTILE_SECRET = process.env.TURNSTILE_SECRET;
+
 const readSecret = async (path: string | undefined): Promise<string> => {
   if (!path) return "";
   try {
@@ -81,7 +83,7 @@ export async function POST(req: NextRequest) {
     const email = sanitize(body.email);
     const message = sanitize(body.message);
     const website = sanitize(body.website || ""); // ハニーポット
-    const hcaptcha = body.hcaptcha ? String(body.hcaptcha) : "";
+    const token = body.token ? String(body.token) : "";
 
     // ハニーポット：埋まってたら拒否
     if (website) {
@@ -99,53 +101,36 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // CAPTCHA検証（HCAPTCHA_SECRET が設定されている場合に有効化）
-    if (process.env.HCAPTCHA_SECRET) {
-      if (!hcaptcha) {
-        return NextResponse.json(
-          {
-            ok: false,
-            type: "captcha",
-            error: "captcha token missing",
-          },
-          { status: 400 },
-        );
-      }
-      const verifyBody = new URLSearchParams({
-        secret: process.env.HCAPTCHA_SECRET!,
-        response: hcaptcha,
-        remoteip: ip,
-      });
-      const verifyRes = await fetch("https://hcaptcha.com/siteverify", {
+    if (!token) {
+      return NextResponse.json(
+        { ok: false, type: "robot", error: "captcha token missing" },
+        { status: 400 },
+      );
+    }
+
+    // Cloudflare Turnstile 検証
+    const verifyRes = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: verifyBody,
-      });
-      if (!verifyRes.ok) {
-        return NextResponse.json(
-          {
-            ok: false,
-            type: "captcha",
-            error: `captcha verify failed: ${verifyRes.status}`,
-          },
-          { status: 502 },
-        );
-      }
-      const verifyJson = (await verifyRes.json()) as {
-        success: boolean;
-        "error-codes"?: string[];
-      };
-      if (!verifyJson.success) {
-        return NextResponse.json(
-          {
-            ok: false,
-            type: "captcha",
-            error: `captcha verify failed: ${verifyRes.status}`,
-            details: verifyJson["error-codes"] ?? [],
-          },
-          { status: 400 },
-        );
-      }
+        body: JSON.stringify({
+          secret: TURNSTILE_SECRET,
+          response: token,
+        }),
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+
+    const outcome = await verifyRes.json();
+    if (!outcome.success) {
+      return NextResponse.json(
+        {
+          ok: false,
+          type: "robot",
+          error: `verify failed: ${verifyRes.status}`,
+        },
+        { status: 502 },
+      );
     }
 
     // --- メール送信（nodemailer + SES SMTP） ---
