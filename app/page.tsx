@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import styles from "../styles/page.module.scss";
-import ContactForm from "./form";
+//:wqimport ContactForm from "./form";
 
 const Home = () => {
   const onMyFaceMouseOver = (event: { currentTarget: HTMLElement }) => {
@@ -326,10 +326,10 @@ const Home = () => {
           </li>
         </ul>
       </section>
-      <section className={styles.contact + " flex flex-col items-center"}>
+      {/*<section className={styles.contact + " flex flex-col items-center"}>
         <header>CONTACT</header>
         <ContactForm />
-      </section>
+      </section>*/}
       <section className={styles.anonymouseMessage + " flex-col"}>
         <p>
           匿名のメッセージは
@@ -347,10 +347,10 @@ const Home = () => {
             <dd>Nginx(proxy) + Node.js(AP)</dd>
             <dt>base:</dt>
             <dd>React 19.x + Next.js 15.x</dd>
-            <dt>contact form:</dt>
+            {/*<dt>contact form:</dt>
             <dd>
               react-hook-form 7.x + nodemailer 7.x + Redis 8.x + Amazon SES
-            </dd>
+            </dd>*/}
           </dl>
           <p style={{ textAlign: "right" }}>
             <a href="/licenses">All Third-Party Licenses &gt;</a>
