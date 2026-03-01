@@ -205,7 +205,7 @@ export default function ContactForm(): React.JSX.Element {
       ? []
       : [
           "CAPTCHAのサイトキーが未設定です。お手数ですが管理者(X(Twitter):@AyeBeeTY)まで連絡してください。",
-        ]
+        ],
   );
   const [stage, setStage] = useState<Stage>(Stage.input);
 
@@ -489,7 +489,9 @@ export default function ContactForm(): React.JSX.Element {
         >
           {hasErrorText ? (
             errorText.map((line, index) => (
-              <p data-error-line={index}>{line}</p>
+              <p data-error-line={index} key={index}>
+                {line}
+              </p>
             ))
           ) : stage.isConfirm() ? (
             <p>上記の内容で送信しますか？</p>

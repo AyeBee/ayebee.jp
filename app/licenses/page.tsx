@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
@@ -31,7 +32,7 @@ export default async function LicensesPage() {
   return (
     <main className="mx-auto max-w-6xl p-6">
       <p className="mb-2">
-        <a href="/">Top</a> &gt; <strong>licenses</strong>
+        <Link href="/">Top</Link> &gt; <strong>licenses</strong>
       </p>
       <h1 className="text-2xl font-bold mb-2">Third-Party Licenses</h1>
       <p className="text-sm text-gray-500">
@@ -79,14 +80,14 @@ export default async function LicensesPage() {
                   <td className="px-3 py-2">{x.licenses}</td>
                   <td className="px-3 py-2">
                     {x.repository ? (
-                      <a
+                      <Link
                         className="underline"
                         href={x.repository}
                         target="_blank"
                         rel="noreferrer"
                       >
                         {x.repository}
-                      </a>
+                      </Link>
                     ) : (
                       "-"
                     )}

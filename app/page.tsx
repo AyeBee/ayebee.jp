@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import styles from "../styles/page.module.scss";
 import ContactForm from "./form";
 
@@ -24,7 +25,7 @@ const Home = () => {
 
     base.setAttribute("viewBox", base.dataset.animateToViewbox);
     [outline, background, ch_t].forEach((e) =>
-      e.setAttribute("d", e.dataset.animateToD)
+      e.setAttribute("d", e.dataset.animateToD),
     );
   };
 
@@ -40,7 +41,7 @@ const Home = () => {
 
     base.setAttribute("viewBox", base.dataset.animateFromViewbox);
     [outline, background, ch_t].forEach((e) =>
-      e.setAttribute("d", e.dataset.animateFromD)
+      e.setAttribute("d", e.dataset.animateFromD),
     );
   };
 
@@ -163,7 +164,7 @@ const Home = () => {
         </article>
         <ul className={styles.links}>
           <li className={styles.item + " " + styles.xApp} data-index="0">
-            <a
+            <Link
               href="https://x.com/ayebee_ty"
               title="@AyeBee_TY"
               target="_blank"
@@ -180,10 +181,10 @@ const Home = () => {
                   <s>Twitter</s> X
                 </span>
               </span>
-            </a>
+            </Link>
           </li>
           <li className={styles.item + " " + styles.misskeyIo} data-index="1">
-            <a
+            <Link
               href="https://misskey.io/@ayebee"
               title="@ayebee"
               target="_blank"
@@ -209,10 +210,10 @@ const Home = () => {
                 <span className={styles.name}>@ayebee</span>
                 <span className={styles.platform}>Misskey.io</span>
               </span>
-            </a>
+            </Link>
           </li>
           <li className={styles.item + " " + styles.bluesky} data-index="2">
-            <a
+            <Link
               href="https://ayebee.bsky.social"
               title="ayebee.bsky.social"
               target="_blank"
@@ -227,7 +228,7 @@ const Home = () => {
                 <span className={styles.name}>ayebee</span>
                 <span className={styles.platform}>Bluesky</span>
               </span>
-            </a>
+            </Link>
           </li>
           <li
             className={styles.item + " " + styles.vrChat}
@@ -235,7 +236,7 @@ const Home = () => {
             onMouseOver={onVRChatIconMouseOver}
             onMouseOut={onVRChatIconMouseOut}
           >
-            <a
+            <Link
               href="https://vrchat.com/home/user/usr_e9802040-37e8-4612-825b-98b8c5162b1e"
               title="ayebee"
               target="_blank"
@@ -285,7 +286,7 @@ const Home = () => {
                 <span className={styles.name}>ayebee</span>
                 <span className={styles.platform}>VRChat</span>
               </span>
-            </a>
+            </Link>
           </li>
           <li className={styles.item + " " + styles.discord} data-index="4">
             <div className={styles.group}>
@@ -306,7 +307,11 @@ const Home = () => {
             </span>
           </li>
           <li className={styles.item + " " + styles.github} data-index="5">
-            <a href="https://github.com/AyeBee" title="AyeBee" target="_blank">
+            <Link
+              href="https://github.com/AyeBee"
+              title="AyeBee"
+              target="_blank"
+            >
               <svg className={styles.icon} viewBox="0 0 50 50">
                 <path
                   className={styles.path}
@@ -317,7 +322,7 @@ const Home = () => {
                 <span className={styles.name}>AyeBee</span>
                 <span className={styles.platform}>GitHub</span>
               </span>
-            </a>
+            </Link>
           </li>
         </ul>
       </section>
@@ -328,9 +333,9 @@ const Home = () => {
       <section className={styles.anonymouseMessage + " flex-col"}>
         <p>
           匿名のメッセージは
-          <a href="https://marshmallow-qa.com/ayebee_ty" target="_blank">
+          <Link href="https://marshmallow-qa.com/ayebee_ty" target="_blank">
             マシュマロ
-          </a>
+          </Link>
           へ！
         </p>
       </section>
