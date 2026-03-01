@@ -44,9 +44,11 @@ interface IInputProps {
   sub?: string;
   placeholder?: string;
   required?: boolean;
-  register: UseFormRegister<IContactForm>;
+  minLength?: number;
+  maxLength?: number;
   error: FieldError | undefined;
   stage: Stage;
+  register: UseFormRegister<IContactForm>;
   watch: UseFormWatch<IContactForm>;
 }
 
@@ -96,24 +98,39 @@ const Input = ({
   sub,
   placeholder,
   required,
-  register,
+  minLength,
+  maxLength,
   error,
   stage,
+  register,
   watch,
 }: IInputProps) => {
-  const registerOptions: RegisterOptions<IContactForm> = {};
+  // 指定された引数に応じてバリデーションを追加
+  const validations: RegisterOptions<IContactForm> = {};
   if (required) {
-    registerOptions.required = "内容を入力してください";
+    validations.required = "内容を入力してください";
+  }
+  if (minLength !== undefined) {
+    validations.minLength = {
+      value: minLength,
+      message: `${minLength}文字以上で入力してください`,
+    };
+  }
+  if (maxLength !== undefined) {
+    validations.maxLength = {
+      value: maxLength,
+      message: `${maxLength}文字以下で入力してください`,
+    };
   }
   if (type === "email") {
-    registerOptions.pattern = {
+    validations.pattern = {
       value:
         /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
       message: "メール形式が不正です",
     };
   }
 
-  const registerProps = register(fieldKey, registerOptions);
+  const registerProps = register(fieldKey, validations);
 
   // input/textarea 共通 props
   const props = {
@@ -380,9 +397,10 @@ export default function ContactForm(): React.JSX.Element {
           type="text"
           sub="(個人の場合は不要)"
           placeholder="例）AyeBee Inc."
-          register={register}
+          maxLength={100}
           error={errors.organization}
           stage={stage}
+          register={register}
           watch={watch}
         />
         <Input
@@ -390,10 +408,11 @@ export default function ContactForm(): React.JSX.Element {
           label="お名前"
           type="text"
           placeholder="山田 太郎"
+          maxLength={100}
           required
-          register={register}
           error={errors.name}
           stage={stage}
+          register={register}
           watch={watch}
         />
         <Input
@@ -401,10 +420,11 @@ export default function ContactForm(): React.JSX.Element {
           label="メールアドレス"
           type="email"
           placeholder="taro@example.com"
+          maxLength={255}
           required
-          register={register}
           error={errors.email}
           stage={stage}
+          register={register}
           watch={watch}
         />
         <Input
@@ -412,10 +432,11 @@ export default function ContactForm(): React.JSX.Element {
           label="お問い合わせ内容"
           type="textarea"
           sub="(改行可)"
+          maxLength={2000}
           required
-          register={register}
           error={errors.message}
           stage={stage}
+          register={register}
           watch={watch}
         />
       </dl>
@@ -488,6 +509,7 @@ export default function ContactForm(): React.JSX.Element {
           ) : stage.isConfirm() ? (
             <>戻って修正</>
           ) : (
+            /* sent or failed */
             <>別の問い合わせを送る</>
           )}
         </button>
@@ -502,6 +524,7 @@ export default function ContactForm(): React.JSX.Element {
           ) : stage.isInput() ? (
             <>入力確認</>
           ) : (
+            /* confirm */
             <>送信する</>
           )}
         </button>

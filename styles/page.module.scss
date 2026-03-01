@@ -557,3 +557,32 @@
   text-align: center;
   margin: 1em 0;
 }
+
+.pageFooter {
+  width: 100%;
+  border-top: 1px dotted rgba(0, 0, 0, 0.5);
+  padding-top: 1em;
+  color: #756d5b;
+  & > * {
+    width: 500px;
+    margin: 0 auto;
+  }
+  dl {
+    dt {
+      font-weight: bold;
+    }
+    dd {
+      margin-left: 1em;
+    }
+  }
+}
+
+.source {
+  margin-top: 1em;
+}
+
+.copyright {
+  font-style: italic;
+  text-align: center;
+  margin-top: 1em;
+}

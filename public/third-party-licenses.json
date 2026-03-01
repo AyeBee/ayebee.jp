@@ -1,0 +1,278 @@
+{
+  "generatedAt": "2025-10-19T21:34:05.771Z",
+  "items": [
+    {
+      "name": "@babel/runtime",
+      "version": "7.28.4",
+      "licenses": "MIT",
+      "repository": "https://github.com/babel/babel",
+      "publisher": "The Babel Team"
+    },
+    {
+      "name": "@hcaptcha/loader",
+      "version": "2.1.0",
+      "licenses": "MIT",
+      "repository": "https://github.com/hCaptcha/hcaptcha-loader",
+      "publisher": "hCaptcha team and contributors"
+    },
+    {
+      "name": "@hcaptcha/react-hcaptcha",
+      "version": "1.12.1",
+      "licenses": "MIT",
+      "repository": "https://github.com/hCaptcha/react-hcaptcha",
+      "publisher": "hCaptcha team and contributors"
+    },
+    {
+      "name": "@img/colour",
+      "version": "1.0.0",
+      "licenses": "MIT",
+      "repository": "https://github.com/lovell/colour",
+      "publisher": ""
+    },
+    {
+      "name": "@img/sharp-win32-x64",
+      "version": "0.34.4",
+      "licenses": "Apache-2.0 AND LGPL-3.0-or-later",
+      "repository": "https://github.com/lovell/sharp",
+      "publisher": "Lovell Fuller"
+    },
+    {
+      "name": "@next/env",
+      "version": "15.5.4",
+      "licenses": "MIT",
+      "repository": "https://github.com/vercel/next.js",
+      "publisher": "Next.js Team"
+    },
+    {
+      "name": "@next/swc-win32-x64-msvc",
+      "version": "15.5.4",
+      "licenses": "MIT",
+      "repository": "https://github.com/vercel/next.js",
+      "publisher": ""
+    },
+    {
+      "name": "@parcel/watcher",
+      "version": "2.5.1",
+      "licenses": "MIT",
+      "repository": "https://github.com/parcel-bundler/watcher",
+      "publisher": ""
+    },
+    {
+      "name": "@parcel/watcher-win32-x64",
+      "version": "2.5.1",
+      "licenses": "MIT",
+      "repository": "https://github.com/parcel-bundler/watcher",
+      "publisher": ""
+    },
+    {
+      "name": "@swc/helpers",
+      "version": "0.5.15",
+      "licenses": "Apache-2.0",
+      "repository": "https://github.com/swc-project/swc",
+      "publisher": "강동윤"
+    },
+    {
+      "name": "braces",
+      "version": "3.0.3",
+      "licenses": "MIT",
+      "repository": "https://github.com/micromatch/braces",
+      "publisher": "Jon Schlinkert"
+    },
+    {
+      "name": "caniuse-lite",
+      "version": "1.0.30001750",
+      "licenses": "CC-BY-4.0",
+      "repository": "https://github.com/browserslist/caniuse-lite",
+      "publisher": "Ben Briggs"
+    },
+    {
+      "name": "chokidar",
+      "version": "4.0.3",
+      "licenses": "MIT",
+      "repository": "https://github.com/paulmillr/chokidar",
+      "publisher": "Paul Miller"
+    },
+    {
+      "name": "client-only",
+      "version": "0.0.1",
+      "licenses": "MIT",
+      "repository": "",
+      "publisher": ""
+    },
+    {
+      "name": "detect-libc",
+      "version": "2.1.2",
+      "licenses": "Apache-2.0",
+      "repository": "https://github.com/lovell/detect-libc",
+      "publisher": "Lovell Fuller"
+    },
+    {
+      "name": "fill-range",
+      "version": "7.1.1",
+      "licenses": "MIT",
+      "repository": "https://github.com/jonschlinkert/fill-range",
+      "publisher": "Jon Schlinkert"
+    },
+    {
+      "name": "immutable",
+      "version": "5.1.4",
+      "licenses": "MIT",
+      "repository": "https://github.com/immutable-js/immutable-js",
+      "publisher": "Lee Byron"
+    },
+    {
+      "name": "is-extglob",
+      "version": "2.1.1",
+      "licenses": "MIT",
+      "repository": "https://github.com/jonschlinkert/is-extglob",
+      "publisher": "Jon Schlinkert"
+    },
+    {
+      "name": "is-glob",
+      "version": "4.0.3",
+      "licenses": "MIT",
+      "repository": "https://github.com/micromatch/is-glob",
+      "publisher": "Jon Schlinkert"
+    },
+    {
+      "name": "is-number",
+      "version": "7.0.0",
+      "licenses": "MIT",
+      "repository": "https://github.com/jonschlinkert/is-number",
+      "publisher": "Jon Schlinkert"
+    },
+    {
+      "name": "micromatch",
+      "version": "4.0.8",
+      "licenses": "MIT",
+      "repository": "https://github.com/micromatch/micromatch",
+      "publisher": "Jon Schlinkert"
+    },
+    {
+      "name": "nanoid",
+      "version": "3.3.11",
+      "licenses": "MIT",
+      "repository": "https://github.com/ai/nanoid",
+      "publisher": "Andrey Sitnik"
+    },
+    {
+      "name": "next",
+      "version": "15.5.4",
+      "licenses": "MIT",
+      "repository": "https://github.com/vercel/next.js",
+      "publisher": ""
+    },
+    {
+      "name": "node-addon-api",
+      "version": "7.1.1",
+      "licenses": "MIT",
+      "repository": "https://github.com/nodejs/node-addon-api",
+      "publisher": ""
+    },
+    {
+      "name": "nodemailer",
+      "version": "7.0.9",
+      "licenses": "MIT-0",
+      "repository": "https://github.com/nodemailer/nodemailer",
+      "publisher": "Andris Reinman"
+    },
+    {
+      "name": "picocolors",
+      "version": "1.1.1",
+      "licenses": "ISC",
+      "repository": "https://github.com/alexeyraspopov/picocolors",
+      "publisher": "Alexey Raspopov"
+    },
+    {
+      "name": "picomatch",
+      "version": "2.3.1",
+      "licenses": "MIT",
+      "repository": "https://github.com/micromatch/picomatch",
+      "publisher": "Jon Schlinkert"
+    },
+    {
+      "name": "react",
+      "version": "19.2.0",
+      "licenses": "MIT",
+      "repository": "https://github.com/facebook/react",
+      "publisher": ""
+    },
+    {
+      "name": "react-dom",
+      "version": "19.2.0",
+      "licenses": "MIT",
+      "repository": "https://github.com/facebook/react",
+      "publisher": ""
+    },
+    {
+      "name": "react-hook-form",
+      "version": "7.65.0",
+      "licenses": "MIT",
+      "repository": "https://github.com/react-hook-form/react-hook-form",
+      "publisher": "Beier"
+    },
+    {
+      "name": "readdirp",
+      "version": "4.1.2",
+      "licenses": "MIT",
+      "repository": "https://github.com/paulmillr/readdirp",
+      "publisher": "Thorsten Lorenz"
+    },
+    {
+      "name": "sass",
+      "version": "1.93.2",
+      "licenses": "MIT",
+      "repository": "https://github.com/sass/dart-sass",
+      "publisher": "Natalie Weizenbaum"
+    },
+    {
+      "name": "scheduler",
+      "version": "0.27.0",
+      "licenses": "MIT",
+      "repository": "https://github.com/facebook/react",
+      "publisher": ""
+    },
+    {
+      "name": "semver",
+      "version": "7.7.3",
+      "licenses": "ISC",
+      "repository": "https://github.com/npm/node-semver",
+      "publisher": "GitHub Inc."
+    },
+    {
+      "name": "sharp",
+      "version": "0.34.4",
+      "licenses": "Apache-2.0",
+      "repository": "https://github.com/lovell/sharp",
+      "publisher": "Lovell Fuller"
+    },
+    {
+      "name": "source-map-js",
+      "version": "1.2.1",
+      "licenses": "BSD-3-Clause",
+      "repository": "https://github.com/7rulnik/source-map-js",
+      "publisher": "Valentin 7rulnik Semirulnik"
+    },
+    {
+      "name": "styled-jsx",
+      "version": "5.1.6",
+      "licenses": "MIT",
+      "repository": "https://github.com/vercel/styled-jsx",
+      "publisher": ""
+    },
+    {
+      "name": "to-regex-range",
+      "version": "5.0.1",
+      "licenses": "MIT",
+      "repository": "https://github.com/micromatch/to-regex-range",
+      "publisher": "Jon Schlinkert"
+    },
+    {
+      "name": "tslib",
+      "version": "2.8.1",
+      "licenses": "0BSD",
+      "repository": "https://github.com/Microsoft/tslib",
+      "publisher": "Microsoft Corp."
+    }
+  ]
+}

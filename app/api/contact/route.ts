@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
     if (!rateLimit(ip)) {
       return NextResponse.json(
         { ok: false, type: "quota-limit", error: "Too many requests" },
-        { status: 429 }
+        { status: 429 },
       );
     }
 
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
     if (website) {
       return NextResponse.json(
         { ok: false, type: "invalid-request", error: "Invalid payload" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
     if (!name || !email || !message || !isEmail(email)) {
       return NextResponse.json(
         { ok: false, type: "invalid-request", error: "Invalid payload" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
             type: "captcha",
             error: "captcha token missing",
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
       const verifyBody = new URLSearchParams({
@@ -128,7 +128,7 @@ export async function POST(req: NextRequest) {
             type: "captcha",
             error: `captcha verify failed: ${verifyRes.status}`,
           },
-          { status: 502 }
+          { status: 502 },
         );
       }
       const verifyJson = (await verifyRes.json()) as {
@@ -143,7 +143,7 @@ export async function POST(req: NextRequest) {
             error: `captcha verify failed: ${verifyRes.status}`,
             details: verifyJson["error-codes"] ?? [],
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
     }
@@ -163,7 +163,7 @@ export async function POST(req: NextRequest) {
             type: "server",
             error: `Server misconfigured: ${k} missing`,
           },
-          { status: 500 }
+          { status: 500 },
         );
       }
     }
@@ -224,7 +224,7 @@ ${message}
           error: "Auto response email did not reach.",
           details: e ? [e.message] : [],
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -256,13 +256,12 @@ ${message}
         error: "Failed to accept your inquiry email.",
         details: e ? [e.message] : [],
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function GET() {
-  // 動作確認用（不要なら削除）
   return NextResponse.json({ ok: true, method: "GET" });
 }
 
