@@ -1,27 +1,6 @@
 {
-  "generatedAt": "2025-10-19T21:34:05.771Z",
+  "generatedAt": "2026-03-02T14:51:29.532Z",
   "items": [
-    {
-      "name": "@babel/runtime",
-      "version": "7.28.4",
-      "licenses": "MIT",
-      "repository": "https://github.com/babel/babel",
-      "publisher": "The Babel Team"
-    },
-    {
-      "name": "@hcaptcha/loader",
-      "version": "2.1.0",
-      "licenses": "MIT",
-      "repository": "https://github.com/hCaptcha/hcaptcha-loader",
-      "publisher": "hCaptcha team and contributors"
-    },
-    {
-      "name": "@hcaptcha/react-hcaptcha",
-      "version": "1.12.1",
-      "licenses": "MIT",
-      "repository": "https://github.com/hCaptcha/react-hcaptcha",
-      "publisher": "hCaptcha team and contributors"
-    },
     {
       "name": "@img/colour",
       "version": "1.0.0",
@@ -37,6 +16,13 @@
       "publisher": "Lovell Fuller"
     },
     {
+      "name": "@marsidev/react-turnstile",
+      "version": "1.4.2",
+      "licenses": "MIT",
+      "repository": "https://github.com/marsidev/react-turnstile",
+      "publisher": "Luis Marsiglia"
+    },
+    {
       "name": "@next/env",
       "version": "15.5.4",
       "licenses": "MIT",
@@ -46,6 +32,13 @@
     {
       "name": "@next/swc-win32-x64-msvc",
       "version": "15.5.4",
+      "licenses": "MIT",
+      "repository": "https://github.com/vercel/next.js",
+      "publisher": ""
+    },
+    {
+      "name": "@next/third-parties",
+      "version": "16.1.6",
       "licenses": "MIT",
       "repository": "https://github.com/vercel/next.js",
       "publisher": ""
@@ -258,6 +251,13 @@
       "version": "5.1.6",
       "licenses": "MIT",
       "repository": "https://github.com/vercel/styled-jsx",
+      "publisher": ""
+    },
+    {
+      "name": "third-party-capital",
+      "version": "1.0.20",
+      "licenses": "ISC",
+      "repository": "https://github.com/housseindjirdeh/third-party-capital",
       "publisher": ""
     },
     {

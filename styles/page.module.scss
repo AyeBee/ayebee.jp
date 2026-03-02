@@ -565,6 +565,7 @@
   color: #756d5b;
   & > * {
     width: 500px;
+    max-width: 95vw;
     margin: 0 auto;
   }
   dl {

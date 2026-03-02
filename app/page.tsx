@@ -344,7 +344,7 @@ const Home = () => {
           <p>このページで使用されている諸技術/ライブラリ等について:</p>
           <dl>
             <dt>server:</dt>
-            <dd>Nginx(proxy) + Node.js(AP)</dd>
+            <dd>Nginx(proxy) + Node.js(AP) + PM2</dd>
             <dt>base:</dt>
             <dd>React 19.x + Next.js 15.x</dd>
             <dt>contact form:</dt>
