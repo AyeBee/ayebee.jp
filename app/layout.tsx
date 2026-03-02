@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Sans_JP, Roboto } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 
 // 必要なサブセット/ウェイトだけ指定（重いと表示が遅くなる）
@@ -54,7 +55,12 @@ export default function RootLayout({
       lang="ja"
       className={`${inter.variable} ${noto.variable} ${roboto.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID} />
+        )}
+        {children}
+      </body>
     </html>
   );
 }
