@@ -20,6 +20,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ayebee.jp"),
   title: {
     default: "あやびーのぺーじ",
     template: "%s | あやびーのぺーじ",
