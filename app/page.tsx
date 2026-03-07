@@ -5,12 +5,25 @@ import styles from "../styles/page.module.scss";
 import ContactForm from "./form";
 
 const Home = () => {
+  let toggle = false;
+
   const onMyFaceMouseOver = (event: { currentTarget: HTMLElement }) => {
+    toggle = true;
     event.currentTarget.classList?.add("hover");
   };
 
   const onMyFaceMouseLeave = (event: { currentTarget: HTMLElement }) => {
+    toggle = false;
     event.currentTarget.classList?.remove("hover");
+  };
+
+  const onMyFaceMouseToggle = (event: { currentTarget: HTMLElement }) => {
+    toggle = !toggle;
+    if (toggle) {
+      onMyFaceMouseOver(event);
+    } else {
+      onMyFaceMouseLeave(event);
+    }
   };
 
   const onVRChatIconMouseOver = (event: { currentTarget: HTMLElement }) => {
@@ -58,6 +71,7 @@ const Home = () => {
         className={styles.profile + " flex-col"}
         onMouseOver={onMyFaceMouseOver}
         onMouseLeave={onMyFaceMouseLeave}
+        onMouseDown={onMyFaceMouseToggle}
       >
         <article className={styles.me}>
           <svg className={styles.face} viewBox="0 0 185 170">

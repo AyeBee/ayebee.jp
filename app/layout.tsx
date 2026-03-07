@@ -25,19 +25,19 @@ export const metadata: Metadata = {
     default: "あやびーのぺーじ",
     template: "%s | あやびーのぺーじ",
   },
-  description: "やっつけプロフィールページ",
+  description: "あやびーのやっつけプロフィールページ",
   manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
     url: "https://ayebee.jp/",
     siteName: "あやびーのぺーじ",
     title: "あやびーのぺーじ",
-    description: "やっつけプロフィールページ",
+    description: "あやびーのやっつけプロフィールページ",
   },
   twitter: {
     card: "summary_large_image",
     title: "あやびーのぺーじ",
-    description: "やっつけプロフィールページ",
+    description: "あやびーのやっつけプロフィールページ",
   },
 };
 
