@@ -14,7 +14,7 @@
     "@marsidev/react-turnstile": "^1.4.2",
     "@next/third-parties": "^16.1.6",
     "next": "^15.5.4",
-    "nodemailer": "^7.0.9",
+    "nodemailer": "^10.0.9",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.65.0"
